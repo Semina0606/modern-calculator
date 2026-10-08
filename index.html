@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="midnight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="NovaCalc - Modern, estetik ve güçlü bilimsel web hesap makinesi. Cam efekti, canlı önizleme, ses efektleri ve işlem geçmişi.">
+  <title>NovaCalc — Modern & Bilimsel Hesap Makinesi</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <main class="app-container">
+    <div class="calculator-card glass-panel" id="calculatorApp">
+      
+      <!-- Top Bar / App Header -->
+      <header class="calc-header">
+        <div class="brand">
+          <div class="brand-badge">
+            <span class="brand-dot"></span>
+            <span class="brand-name">Nova<span class="accent-text">Calc</span></span>
+          </div>
+          <span class="mode-badge" id="currentModeBadge">Standart</span>
+        </div>
+
+        <div class="header-actions">
+          <!-- Scientific Mode Toggle Button -->
+          <button type="button" class="icon-btn" id="btnToggleSci" title="Bilimsel Modu Aç/Kapat" aria-label="Bilimsel Mod">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19h16M4 5h16M7 9l4 6 4-6" />
+            </svg>
+            <span class="btn-text-sm">fx</span>
+          </button>
+
+          <!-- Audio Sound Toggle -->
+          <button type="button" class="icon-btn" id="btnToggleSound" title="Tuş Sesleri Açık/Kapalı" aria-label="Tuş Sesi">
+            <svg class="svg-icon sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+            <svg class="svg-icon sound-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          </button>
+
+          <!-- Theme Selector Menu -->
+          <div class="theme-dropdown-wrapper">
+            <button type="button" class="icon-btn" id="btnThemeMenu" title="Tema Değiştir" aria-label="Tema Menüsü">
+              <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+              </svg>
+            </button>
+            <div class="theme-menu glass-panel hidden" id="themeMenu">
+              <button type="button" class="theme-option active" data-theme-val="midnight">
+                <span class="theme-color-preview preview-midnight"></span>
+                <span>Gece Mavisi (Midnight)</span>
+              </button>
+              <button type="button" class="theme-option" data-theme-val="cyberpunk">
+                <span class="theme-color-preview preview-cyberpunk"></span>
+                <span>Cyberpunk Neon</span>
+              </button>
+              <button type="button" class="theme-option" data-theme-val="sunset">
+                <span class="theme-color-preview preview-sunset"></span>
+                <span>Gün Batımı (Sunset)</span>
+              </button>
+              <button type="button" class="theme-option" data-theme-val="aurora">
+                <span class="theme-color-preview preview-aurora"></span>
+                <span>Buzul Cam (Aurora)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- History Drawer Toggle -->
+          <button type="button" class="icon-btn" id="btnToggleHistory" title="Geçmiş Kayıtlar" aria-label="Geçmiş">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <span class="history-badge hidden" id="historyCounter">0</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Display Section -->
+      <section class="display-container" id="calcDisplay">
+        <div class="display-status-bar">
+          <div class="status-left">
+            <button type="button" class="tag-btn" id="btnDegRad" title="Açı Birimi Değiştir">DEG</button>
+            <span class="status-tag hidden" id="memoryIndicator">M</span>
+          </div>
+          <button type="button" class="copy-btn" id="btnCopyResult" title="Sonucu Kopyala" aria-label="Sonucu Kopyala">
+            <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            <span class="copy-label">Kopyala</span>
+          </button>
+        </div>
+
+        <!-- Upper expression history formula -->
+        <div class="expression-line" id="expressionDisplay" title="İşlem"></div>
+
+        <!-- Live evaluation preview or main result -->
+        <div class="main-result-wrapper">
+          <div class="live-preview" id="livePreviewDisplay"></div>
+          <div class="main-result" id="mainDisplay">0</div>
+        </div>
+      </section>
+
+      <!-- Scientific Panel (Toggled via button) -->
+      <section class="scientific-panel hidden" id="scientificPanel">
+        <div class="sci-grid">
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="sin">sin</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="cos">cos</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="tan">tan</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="log">log</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="ln">ln</button>
+
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="sqrt">√x</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="pow2">x²</button>
+          <button type="button" class="key-btn key-sci" data-action="operator" data-val="^">xʸ</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="inv">1/x</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="fact">n!</button>
+
+          <button type="button" class="key-btn key-sci" data-action="insert" data-val="π">π</button>
+          <button type="button" class="key-btn key-sci" data-action="insert" data-val="e">e</button>
+          <button type="button" class="key-btn key-sci" data-action="insert" data-val="(">(</button>
+          <button type="button" class="key-btn key-sci" data-action="insert" data-val=")">)</button>
+          <button type="button" class="key-btn key-sci" data-action="sci" data-fn="abs">|x|</button>
+        </div>
+      </section>
+
+      <!-- Memory Toolbar -->
+      <div class="memory-bar">
+        <button type="button" class="mem-btn" data-mem="mc" title="Belleği Temizle">MC</button>
+        <button type="button" class="mem-btn" data-mem="mr" title="Belleği Çağır">MR</button>
+        <button type="button" class="mem-btn" data-mem="m+" title="Belleğe Ekle">M+</button>
+        <button type="button" class="mem-btn" data-mem="m-" title="Bellekten Çıkar">M-</button>
+        <button type="button" class="mem-btn" data-mem="ms" title="Belleğe Kaydet">MS</button>
+      </div>
+
+      <!-- Main Keypad Grid -->
+      <section class="keypad-grid">
+        <!-- Row 1 -->
+        <button type="button" class="key-btn key-danger" data-action="clear-all" id="keyAllClear">AC</button>
+        <button type="button" class="key-btn key-secondary" data-action="backspace" id="keyBackspace" title="Geri Al (Backspace)">
+          <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+            <line x1="18" y1="9" x2="12" y2="15" />
+            <line x1="12" y1="9" x2="18" y2="15" />
+          </svg>
+        </button>
+        <button type="button" class="key-btn key-secondary" data-action="operator" data-val="%">%</button>
+        <button type="button" class="key-btn key-operator" data-action="operator" data-val="÷">÷</button>
+
+        <!-- Row 2 -->
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="7">7</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="8">8</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="9">9</button>
+        <button type="button" class="key-btn key-operator" data-action="operator" data-val="×">×</button>
+
+        <!-- Row 3 -->
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="4">4</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="5">5</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="6">6</button>
+        <button type="button" class="key-btn key-operator" data-action="operator" data-val="-">−</button>
+
+        <!-- Row 4 -->
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="1">1</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="2">2</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="3">3</button>
+        <button type="button" class="key-btn key-operator" data-action="operator" data-val="+">+</button>
+
+        <!-- Row 5 -->
+        <button type="button" class="key-btn key-secondary" data-action="negate">±</button>
+        <button type="button" class="key-btn key-num" data-action="digit" data-val="0">0</button>
+        <button type="button" class="key-btn key-num" data-action="decimal">,</button>
+        <button type="button" class="key-btn key-equals" data-action="equals" id="keyEquals">=</button>
+      </section>
+
+      <!-- Keyboard Shortcuts Info Footer -->
+      <footer class="calc-footer">
+        <span class="shortcut-tip"><kbd>Klavyeniz</kbd> ile de doğrudan hesaplayabilirsiniz (Enter, Esc, +, -, *, /, 0-9)</span>
+      </footer>
+
+      <!-- History Drawer (Slide-in) -->
+      <div class="history-drawer glass-panel hidden" id="historyDrawer">
+        <div class="history-header">
+          <div class="history-title">
+            <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <span>İşlem Geçmişi</span>
+          </div>
+          <div class="history-controls">
+            <button type="button" class="text-btn danger-text" id="btnClearHistory" title="Geçmişi Sil">Temizle</button>
+            <button type="button" class="icon-btn-sm" id="btnCloseHistory" aria-label="Kapat">
+              <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="history-list" id="historyList">
+          <div class="history-empty">
+            <div class="empty-icon">🕒</div>
+            <p>Henüz hesaplama yapılmadı</p>
+            <span class="empty-hint">Yaptığınız işlemler burada saklanır ve tıklayarak geri çağrılabilir.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Toast Notification -->
+  <div class="toast-notification hidden" id="toast">Sonuç panoya kopyalandı!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>

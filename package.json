@@ -1,0 +1,21 @@
+{
+  "name": "novacalc",
+  "version": "1.0.0",
+  "description": "Modern & Scientific Web Calculator with Glassmorphism, Dynamic Themes and Web Audio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "calculator",
+    "scientific-calculator",
+    "glassmorphism",
+    "web-audio",
+    "modern-ui",
+    "dark-mode",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT"
+}
